@@ -2,7 +2,8 @@ import bcrypt from "bcrypt";
 import fs from "fs/promises";
 import path from "path";
 import { Users } from "../model/users";
-import { Sequelize } from "sequelize";
+import { Op } from "sequelize";
+import sequelize from "../db";
 
 export async function getAllUser() {
   const user = await Users.findAll();
@@ -22,7 +23,12 @@ export async function registerUser({
 }) {
   try {
     const existingUser = await Users.findOne({
-      where: { [Sequelize.Op.or]: [{ username }, { email }] },
+      where: {
+        [Op.or]: [
+          { username: { [Op.eq]: username } },
+          { email: { [Op.eq]: email } },
+        ],
+      },
     });
 
     if (existingUser) {
@@ -96,7 +102,9 @@ export async function registerUser({
 }
 
 export async function loginUser(username, password) {
-  const user = await Users.findOne({ where: { username : username } });
+  const user = await Users.findOne({
+    where: { username: { [Op.eq]: username } },
+  });
 
   if (!user) {
     throw new Error("Invalid username or password");
