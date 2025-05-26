@@ -56,7 +56,7 @@ router.post("/login", userController.loginController);
  *             properties:
  *               username:
  *                 type: string
- *                 example: "" 
+ *                 example: ""
  *               email:
  *                 type: string
  *                 example: ""
@@ -111,7 +111,7 @@ router.get("/getAllUser", verifyToken, userController.getAllUserController);
  *       - Users
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: uid
  *         required: true
  *         description: ID ของผู้ใช้
  *         schema:
@@ -135,7 +135,7 @@ router.get("/getImage/:uid", verifyToken, userController.getImageController);
  *       - Users
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: uid
  *         required: true
  *         description: ID ของผู้ใช้
  *         schema:
@@ -179,10 +179,19 @@ router.get(
  *             properties:
  *               username:
  *                 type: string
+ *                 example: ""
  *               email:
  *                 type: string
+ *                 example: ""
  *               password:
  *                 type: string
+ *                 example: ""
+ *               firstname:
+ *                 type: string
+ *                 example: ""
+ *               lastname:
+ *                 type: string
+ *                 example: ""
  *               image:
  *                 type: string
  *                 format: binary
