@@ -1,49 +1,42 @@
 import * as userService from "../services/userService.js";
 import jwt from "jsonwebtoken";
 import path from "path";
+import {
+  successResponse,
+  errorResponse,
+} from "../middleware/responseMessage.js";
 
 export async function getAllUserController(req, res) {
   try {
     const users = await userService.getAllUser();
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Database error" });
+    successResponse(res, users);
+  } catch (err) {
+    errorResponse(res, 400, err.message);
   }
 }
 
 export async function registerController(req, res) {
-  const { username, email, password, firstname, lastname } = req.body;
+  const body = req.body;
   const imageFile = req.file;
   const imagePath = imageFile ? imageFile.filename : null;
 
-  if (!username || !email || !password) {
-    return res
-      .status(400)
-      .json({ error: "username, email, and password are required" });
+  if (!body.username || !body.email || !body.password) {
+    throw new Error("username, email, and password are required");
   }
 
+  const userData = { ...body, image: imagePath };
   try {
-    const result = await userService.registerUser({
-      username,
-      email,
-      password,
-      firstname,
-      lastname,
-      image: imagePath,
-    });
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+    const result = await userService.registerUser(userData);
+    successResponse(res, result, "Register Success");
+  } catch (err) {
+    errorResponse(res, 400, err.message);
   }
 }
 
 export async function loginController(req, res) {
   const { username, password } = req.body;
   if (!username || !password) {
-    return res
-      .status(400)
-      .json({ error: "username and password are required" });
+    throw new Error("username and password are required");
   }
 
   try {
@@ -56,43 +49,37 @@ export async function loginController(req, res) {
     );
 
     res.json({ token });
-  } catch (error) {
-    res.status(401).json({ error: error.message });
+  } catch (err) {
+    errorResponse(res, 400, err.message);
   }
 }
 
 export async function deleteUserController(req, res) {
   const { uid } = req.params;
   try {
-    await userService.deleteUser(uid);
-    res.json({ message: `User ID : ${uid} deleted successfully` });
-  } catch (error) {
-    if (error.message === "User not Found") {
-      return res.status(404).json({ error: error.message });
-    }
-    res.status(500).json({ error: "Database error" });
+    const result = await userService.deleteUser(uid);
+    successResponse(res, result, `User ID : ${uid} deleted successfully`);
+  } catch (err) {
+    errorResponse(res, 400, err.message);
   }
 }
 
 export async function updateUserController(req, res) {
   const { uid } = req.params;
-  const body = req.body || {}; // ป้องกัน req.body เป็น undefined
-  const { username, email, password, firstname, lastname } = body;
+  const body = req.body;
   const imageFile = req.file;
   const imagePath = imageFile ? imageFile.filename : null;
-  try {
-    await userService.updateUser(uid, {
-      username,
-      email,
-      password,
-      firstname,
-      lastname,
-      image: imagePath,
-    });
 
-    res.json({ message: `User ID :  ${uid}  updated successfully` });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+  const userData = {
+    uid,
+    ...body,
+    image: imagePath,
+  };
+  try {
+    const result = await userService.updateUser(userData);
+    successResponse(res, result, `User ID :  ${uid}  updated successfully`);
+  } catch (err) {
+    errorResponse(res, 400, err.message);
   }
 }
 
@@ -101,16 +88,16 @@ export async function getImageController(req, res) {
   try {
     const imageName = await userService.getImage(uid);
     if (!imageName) {
-      return res.status(404).json({ error: "Image not found" });
+      throw new Error("Image not found");
     }
     const imagePath = path.join(process.cwd(), "uploads", imageName);
     res.sendFile(imagePath, (err) => {
       if (err) {
-        res.status(500).json({ error: "Failed to send image" });
+        throw new Error("Failed to send image");
       }
     });
-  } catch (error) {
-    res.status(401).json({ error: error.message });
+  } catch (err) {
+    errorResponse(res, 400, err.message);
   }
 }
 
@@ -118,8 +105,8 @@ export async function getFullnameController(req, res) {
   const { uid } = req.params;
   try {
     const result = await userService.getFullname(uid);
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(401).json({ error: error.message });
+    successResponse(res, result);
+  } catch (err) {
+    errorResponse(res, 400, err.message);
   }
 }

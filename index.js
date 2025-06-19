@@ -1,5 +1,6 @@
 import express from "express";
 import userRoutes from "./routes/userRoutes";
+import productRoutes from "./routes/productRoutes.js";
 import { swaggerUi, specs } from "./swagger.js";
 
 const app = express();
@@ -10,6 +11,7 @@ app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)); // ใช้ /api-docs
 
 app.use("/", userRoutes);
+app.use("/product", productRoutes);
 
 // start server
 app.listen(port, () => {

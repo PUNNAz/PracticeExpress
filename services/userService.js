@@ -13,20 +13,13 @@ export async function getAllUser() {
   // return rows;
 }
 
-export async function registerUser({
-  username,
-  email,
-  password,
-  firstname,
-  lastname,
-  image,
-}) {
+export async function registerUser(userData) {
   try {
     const existingUser = await Users.findOne({
       where: {
         [Op.or]: [
-          { username: { [Op.eq]: username } },
-          { email: { [Op.eq]: email } },
+          { username: { [Op.eq]: userData.username } },
+          { email: { [Op.eq]: userData.email } },
         ],
       },
     });
@@ -34,34 +27,25 @@ export async function registerUser({
     if (existingUser) {
       throw new Error("Username or email already exists");
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
 
     const user = await Users.create({
-      username,
-      email,
+      username: userData.username,
+      email: userData.email,
       password: hashedPassword,
-      firstname,
-      lastname,
-      image,
+      firstname: userData.firstname,
+      lastname: userData.lastname,
+      image: userData.image,
     });
-    return {
-      id: user.UID,
-      username: user.username,
-      email: user.email,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      image: user.image,
-    };
+    return user
   } catch (error) {
-    if (image) {
-      const imagePath = path.join(process.cwd(), "uploads", image);
+    if (userData.image) {
+      const imagePath = path.join(process.cwd(), "uploads", userData.image);
       try {
         await fs.unlink(imagePath);
       } catch (unlinkError) {
-        // log error ลบไฟล์ไม่สำเร็จ แต่ไม่ขัดขวาง flow หลัก
-        console.error(
-          "Failed to delete image after register error:",
-          unlinkError.message
+        throw new Error(
+          `Failed to delete image after register error: ${unlinkError}`
         );
       }
     }
@@ -145,12 +129,12 @@ export async function deleteUser(uid) {
     try {
       await fs.unlink(imagePath);
     } catch (err) {
-      console.error("Failed to delete image:", err.message);
+      throw new Error("Failed to delete image");
     }
   }
 
   await user.destroy();
-
+  return user
   // const [rows] = await pool.query("SELECT image FROM Users WHERE UID = ?", [
   //   uid,
   // ]);
@@ -178,18 +162,18 @@ export async function deleteUser(uid) {
   // }
 }
 
-export async function updateUser(
-  uid,
-  { username, email, password, firstname, lastname, image }
-) {
-  const user = await Users.findByPk(uid);
+export async function updateUser(userData) {
+  const user = await Users.findByPk(userData.uid);
 
   if (!user) throw new Error("User not found");
 
   // hash password ถ้ามี
   let hashedPassword = null;
-  if (typeof password === "string" && password.trim() !== "") {
-    hashedPassword = await bcrypt.hash(password, 10);
+  if (
+    typeof userData.password === "string" &&
+    userData.password.trim() !== ""
+  ) {
+    hashedPassword = await bcrypt.hash(userData.password, 10);
   }
 
   // เก็บรูปเก่าเพื่อลบถ้ามีการเปลี่ยนแปลง
@@ -197,22 +181,24 @@ export async function updateUser(
 
   // อัปเดตข้อมูล user (ใช้ Sequelize update)
   await user.update({
-    username: username ?? user.username,
-    email: email ?? user.email,
+    username: userData.username ?? user.username,
+    email: userData.email ?? user.email,
     password: hashedPassword ?? user.password,
-    firstname: firstname ?? user.firstname,
-    lastname: lastname ?? user.lastname,
-    image: image ?? user.image,
+    firstname: userData.firstname ?? user.firstname,
+    lastname: userData.lastname ?? user.lastname,
+    image: userData.image ?? user.image,
   });
 
-  if (image && oldImage && oldImage !== image) {
+  if (userData.image && oldImage && oldImage !== userData.image) {
     const oldImagePath = path.join(process.cwd(), "uploads", oldImage);
     try {
       await fs.unlink(oldImagePath);
     } catch (err) {
-      console.error("Failed to delete old image:", err.message);
+      throw new Error(`Failed to delete old image: ${err.message}`);
     }
   }
+
+  return user;
 
   // const [rows] = await pool.query("SELECT image FROM Users WHERE UID = ?", [
   //   uid,
