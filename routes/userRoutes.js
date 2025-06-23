@@ -13,7 +13,6 @@ const router = express.Router();
  *     tags:
  *       - Users
  *     requestBody:
- *       description: ข้อมูลสำหรับล็อกอิน
  *       required: true
  *       content:
  *         application/json:
@@ -47,7 +46,6 @@ router.post("/login", userController.loginController);
  *     tags:
  *       - Users
  *     requestBody:
- *       description: ข้อมูลสำหรับการลงทะเบียนผู้ใช้
  *       required: true
  *       content:
  *         multipart/form-data:
