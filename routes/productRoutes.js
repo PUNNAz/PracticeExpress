@@ -101,7 +101,7 @@ router.get("/getAllProduct", verifyToken, productController.getAllProduct);
 /**
  * @swagger
  * /product/deleteProduct:
- *   get:
+ *   delete:
  *     summary: ลบโปรดักส์ตามไอดี
  *     tags:
  *       - products
@@ -109,7 +109,7 @@ router.get("/getAllProduct", verifyToken, productController.getAllProduct);
  *       - bearerAuth: []
  *     requestBody:
  *       content:
- *         application/json::
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
