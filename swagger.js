@@ -29,7 +29,7 @@ const options = {
       },
     ],
   },
-  apis: ["./routes/*.js"], // เส้นทางไปยังไฟล์ route ที่มี comment Swagger
+  apis: ["./index.js", "./routes/*.js"], // เส้นทางไปยังไฟล์ route ที่มี comment Swagger
 };
 
 const specs = swaggerJsdoc(options);
