@@ -1,5 +1,4 @@
 import * as userService from "../services/userService.js";
-import jwt from "jsonwebtoken";
 import path from "path";
 import {
   successResponse,
@@ -10,45 +9,6 @@ export async function getAllUserController(req, res) {
   try {
     const users = await userService.getAllUser();
     successResponse(res, users);
-  } catch (err) {
-    errorResponse(res, 400, err.message);
-  }
-}
-
-export async function registerController(req, res) {
-  const body = req.body;
-  const imageFile = req.file;
-  const imagePath = imageFile ? imageFile.filename : null;
-
-  if (!body.username || !body.email || !body.password) {
-    throw new Error("username, email, and password are required");
-  }
-
-  const userData = { ...body, image: imagePath };
-  try {
-    const result = await userService.registerUser(userData);
-    successResponse(res, result, "Register Success");
-  } catch (err) {
-    errorResponse(res, 400, err.message);
-  }
-}
-
-export async function loginController(req, res) {
-  const { username, password } = req.body;
-  if (!username || !password) {
-    throw new Error("username and password are required");
-  }
-
-  try {
-    const user = await userService.loginUser(username, password);
-
-    const token = jwt.sign(
-      { id: user.UID, username: user.username },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES }
-    );
-
-    res.json({ token });
   } catch (err) {
     errorResponse(res, 400, err.message);
   }

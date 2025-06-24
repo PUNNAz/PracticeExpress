@@ -37,7 +37,7 @@ export async function registerUser(userData) {
       lastname: userData.lastname,
       image: userData.image,
     });
-    return user
+    return user;
   } catch (error) {
     if (userData.image) {
       const imagePath = path.join(process.cwd(), "uploads", userData.image);
@@ -134,7 +134,7 @@ export async function deleteUser(uid) {
   }
 
   await user.destroy();
-  return user
+  return user;
   // const [rows] = await pool.query("SELECT image FROM Users WHERE UID = ?", [
   //   uid,
   // ]);
@@ -181,11 +181,23 @@ export async function updateUser(userData) {
 
   // อัปเดตข้อมูล user (ใช้ Sequelize update)
   await user.update({
-    username: userData.username ?? user.username,
-    email: userData.email ?? user.email,
+    username:
+      userData.username && userData.username.trim() !== ""
+        ? userData.username
+        : user.username,
+    email:
+      userData.email && userData.email.trim() !== ""
+        ? userData.email
+        : user.email,
     password: hashedPassword ?? user.password,
-    firstname: userData.firstname ?? user.firstname,
-    lastname: userData.lastname ?? user.lastname,
+    firstname:
+      userData.firstname && userData.firstname.trim() !== ""
+        ? userData.firstname
+        : user.firstname,
+    lastname:
+      userData.lastname && userData.lastname.trim() !== ""
+        ? userData.lastname
+        : user.lastname,
     image: userData.image ?? user.image,
   });
 

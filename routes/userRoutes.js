@@ -5,87 +5,10 @@ import * as userController from "../controllers/userController.js";
 
 const router = express.Router();
 
-/**
- * @swagger
- * /login:
- *   post:
- *     summary: เข้าสู่ระบบ
- *     tags:
- *       - Users
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - username
- *               - password
- *             properties:
- *               username:
- *                 type: string
- *                 example : admin
- *               password:
- *                 type: string
- *                 example : 123456
- *     responses:
- *       200:
- *         description: เข้าสู่ระบบสำเร็จ
- *       401:
- *         description: ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง
- */
-router.post("/login", userController.loginController);
-
-//CRUD
-//Create
-/**
- * @swagger
- * /register:
- *   post:
- *     summary: ลงทะเบียนผู้ใช้ใหม่
- *     tags:
- *       - Users
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *                 example: ""
- *               email:
- *                 type: string
- *                 example: ""
- *               password:
- *                 type: string
- *                 example: ""
- *               firstname:
- *                 type: string
- *                 example: ""
- *               lastname:
- *                 type: string
- *                 example: ""
- *               image:
- *                 type: string
- *                 format: binary
- *     responses:
- *       201:
- *         description: ผู้ใช้ถูกสร้างแล้ว
- *       400:
- *         description: ข้อมูลไม่ครบถ้วนหรือซ้ำ
- */
-router.post(
-  "/register",
-  upload.single("image"),
-  userController.registerController
-);
-
 //Read
 /**
  * @swagger
- * /getAllUser:
+ * /user/getAllUser:
  *   get:
  *     summary: ดึงข้อมูลผู้ใช้ทั้งหมด
  *     tags:
@@ -102,7 +25,7 @@ router.get("/getAllUser", verifyToken, userController.getAllUserController);
 
 /**
  * @swagger
- * /getImage/{uid}:
+ * /user/getImage/{uid}:
  *   get:
  *     summary: ดึงข้อมูลรูปภาพของผู้ใช้
  *     tags:
@@ -126,7 +49,7 @@ router.get("/getImage/:uid", verifyToken, userController.getImageController);
 
 /**
  * @swagger
- * /getFullname/{uid}:
+ * /user/getFullname/{uid}:
  *   get:
  *     summary: ดึงชื่อเต็มของผู้ใช้
  *     tags:
@@ -155,7 +78,7 @@ router.get(
 //Update
 /**
  * @swagger
- * /updateUser/{uid}:
+ * /user/updateUser/{uid}:
  *   put:
  *     summary: อัปเดตข้อมูลผู้ใช้
  *     tags:
@@ -211,7 +134,7 @@ router.put(
 //Delete
 /**
  * @swagger
- * /delete/{uid}:
+ * /user/delete/{uid}:
  *   delete:
  *     summary: ลบผู้ใช้
  *     tags:

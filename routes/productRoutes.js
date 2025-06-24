@@ -8,9 +8,9 @@ const router = express.Router();
  * @swagger
  * /product/saveProduct:
  *   post:
- *     summary: เพิ่มข้อมูลหรืออัพเดทข้อมูลโปรดักส์
+ *     summary: เพิ่มข้อมูลหรืออัพเดทข้อมูลสินค้า
  *     tags:
- *       - products
+ *       - Products
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -36,7 +36,7 @@ const router = express.Router();
  *                 example : 100
  *     responses:
  *       200:
- *         description: โปรดักส์ถูกสร้างหรืออัพเดทสำเร็จเเล้ว
+ *         description: สินค้าถูกสร้างหรืออัพเดทสำเร็จเเล้ว
  */
 router.post("/saveProduct", verifyToken, productController.saveProduct);
 
@@ -44,14 +44,14 @@ router.post("/saveProduct", verifyToken, productController.saveProduct);
  * @swagger
  * /product/getProducts:
  *   get:
- *     summary: ดึงข้อมูลโปรดักส์ทั้งหมด
+ *     summary: ดึงข้อมูลสินค้าทั้งหมด
  *     tags:
- *       - products
+ *       - Products
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ข้อมูลโปรดักส์ทั้งหมด
+ *         description: ข้อมูลสินค้าทั้งหมด
  *       401:
  *         description: Token ไม่ถูกต้อง
  */
@@ -61,21 +61,21 @@ router.get("/getProducts", verifyToken, productController.getProductByID);
  * @swagger
  * /product/getProducts/{id}:
  *   get:
- *     summary: ดึงข้อมูลโปรดักส์ตามไอดี
+ *     summary: ดึงข้อมูลสินค้าตามไอดี
  *     tags:
- *       - products
+ *       - Products
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID ของโปรดักส์
+ *         description: ID ของสินค้า
  *         schema:
  *           type: string
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ข้อมูลโปรดักส์ที่กรอกไอดีเข้ามา
+ *         description: ข้อมูลสินค้าที่กรอกไอดีเข้ามา
  *       401:
  *         description: Token ไม่ถูกต้อง
  */
@@ -85,14 +85,14 @@ router.get("/getProducts/:id", verifyToken, productController.getProductByID);
  * @swagger
  * /product/getAllProduct:
  *   get:
- *     summary: ดึงข้อมูลโปรดักส์ทั้งหมด
+ *     summary: ดึงข้อมูลสินค้าทั้งหมด
  *     tags:
- *       - products
+ *       - Products
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ข้อมูลโปรดักส์ทั้งหมด
+ *         description: ข้อมูลสินค้าทั้งหมด
  *       401:
  *         description: Token ไม่ถูกต้อง
  */
@@ -102,9 +102,9 @@ router.get("/getAllProduct", verifyToken, productController.getAllProduct);
  * @swagger
  * /product/deleteProduct:
  *   delete:
- *     summary: ลบโปรดักส์ตามไอดี
+ *     summary: ลบสินค้าตามไอดี
  *     tags:
- *       - products
+ *       - Products
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -118,7 +118,7 @@ router.get("/getAllProduct", verifyToken, productController.getAllProduct);
  *                 example : 0
  *     responses:
  *       200:
- *         description: ข้อมูลโปรดักส์ทั้งหมด
+ *         description: ลบสินค้าตามไอดี
  *       401:
  *         description: Token ไม่ถูกต้อง
  */

@@ -1,5 +1,5 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../db"); 
+import { DataTypes } from "sequelize";
+import sequelize from "../db";
 
 const Customer = sequelize.define(
   "Customer",
@@ -30,10 +30,10 @@ const Customer = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    created_at: {
-      type: DataTypes.TIMESTAMP,
-      defaultValue: DataTypes.NOW,
-    },
+    // created_at: {
+    //   type: DataTypes.TIMESTAMP,
+    //   defaultValue: DataTypes.NOW,
+    // },
   },
   {
     tableName: "Customers",
@@ -41,4 +41,4 @@ const Customer = sequelize.define(
   }
 );
 
-module.exports = Customer;
+export { Customer };
