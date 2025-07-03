@@ -30,10 +30,10 @@ const Customer = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    // created_at: {
-    //   type: DataTypes.TIMESTAMP,
-    //   defaultValue: DataTypes.NOW,
-    // },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     tableName: "Customers",

@@ -25,10 +25,10 @@ const Products = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    // created_at: {
-    //   type: DataTypes.TIMESTAMP,
-    //   defaultValue: DataTypes.NOW,
-    // },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     tableName: "Products",

@@ -2,6 +2,7 @@ import express from "express";
 import userRoutes from "./routes/userRoutes";
 import productRoutes from "./routes/productRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 import { swaggerUi, specs } from "./swagger.js";
 import {
   errorResponse,
@@ -23,7 +24,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)); // ใช้ /api
 app.use("/user", userRoutes);
 app.use("/product", productRoutes);
 app.use("/customer", customerRoutes);
-
+app.use("/order", orderRoutes);
 /**
  * @swagger
  * /login:
