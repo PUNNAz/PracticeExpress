@@ -27,7 +27,7 @@ const Payment = sequelize.define(
       defaultValue: "pending",
     },
     payment_date: {
-      type: DataTypes.TIMESTAMP,
+      type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
   },
