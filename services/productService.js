@@ -1,10 +1,9 @@
 import { Products } from "../model/product";
 
 export async function getAllProduct() {
-  const product = await Products.findAll();
-
-  //   if (!product) throw new Error("Product not found");
-
+  const product = await Products.findAll({
+    order: [['price', 'DESC']]
+  });
   return product;
 }
 
@@ -58,4 +57,31 @@ export async function deleteProduct(id) {
 
   await product.destroy();
   return product;
+}
+
+export async function getAveragePrice() {
+  const result = await Products.findAll({
+    attributes: [
+      [
+        Products.sequelize.fn("AVG", Products.sequelize.col("price")),
+        "avg_price",
+      ],
+    ],
+    raw: true
+  });
+
+  return result;
+}
+
+export async function getMaxPriceByName() {
+  const result = await Products.findAll({
+    attributes: [
+      'name',
+      [Products.sequelize.fn('MAX', Products.sequelize.col('price')), 'max_price']
+    ],
+    group: ['name'],
+    raw: true
+  });
+
+  return result;
 }
