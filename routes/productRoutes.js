@@ -100,6 +100,40 @@ router.get("/getAllProduct", verifyToken, productController.getAllProduct);
 
 /**
  * @swagger
+ * /product/getAveragePrice:
+ *   get:
+ *     summary: ดึงข้อมูลราคาสินค้าเฉลี่ย
+ *     tags:
+ *       - Products
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: ข้อมูลราคาสินค้าเฉลี่ย
+ *       401:
+ *         description: Token ไม่ถูกต้อง
+ */
+router.get("/getAveragePrice", verifyToken, productController.getAveragePrice);
+
+/**
+ * @swagger
+ * /product/getMaxPriceByName:
+ *   get:
+ *     summary: ดึงข้อมูลราคาสูงสุดของสินค้าตามชื่อ
+ *     tags:
+ *       - Products
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: ข้อมูลราคาสูงสุดของสินค้าตามชื่อ
+ *       401:
+ *         description: Token ไม่ถูกต้อง
+ */
+router.get("/getMaxPriceByName", verifyToken, productController.getMaxPriceByName);
+
+/**
+ * @swagger
  * /product/deleteProduct:
  *   delete:
  *     summary: ลบสินค้าตามไอดี
