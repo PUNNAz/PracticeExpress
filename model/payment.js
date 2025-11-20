@@ -1,6 +1,6 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../db");
-const Order = require("./order"); // เชื่อมโยงกับ model ของ Orders
+import { DataTypes } from "sequelize";
+import sequelize from "../db.js";
+import { Order } from "./order.js"; // เชื่อมโยงกับ model ของ Orders
 
 const Payment = sequelize.define(
   "Payment",
